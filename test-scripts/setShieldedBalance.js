@@ -6,7 +6,7 @@ var SGDz = artifacts.require("./SGDz.sol");
 var util = require('../util.js');
 var u = require('./test-utils.js');
 
-var sha256 = require('js-sha256').sha256;
+// var sha256 = require('js-sha256').sha256; // PHH commented out
 
 // set initial variables
 var bankIdx = process.argv[6];
