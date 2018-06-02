@@ -18,7 +18,7 @@ Additional notes:
 
 1\.	Provision 14 Ubuntu (Xenial - LTS 16.04) VMs (11 banks, 1 MAS central bank, 1 MAS Regulatory Node, 1 deployment, 16GB, 2 cores)
 
-2\.	A static IP address has to be configured for all the VMs
+2\.	Please include the two-digit numbers 01, 02 .. 14 in the name of the VMs and a static IP address has to be configured for all the VMs.
 
 3\. Node v8.x.x is installed for all the VMs
 
@@ -346,7 +346,7 @@ $ ./initStash.sh 10 2000 3000 4000 5000 6000 7000 8000 9000 1000 1200 1400 1500
 2\. Clone the git repo for the DApp to each bank VM and the deployment node. You may need to provide your credentials.
 
 ```sh
-$ git clone https://github.com/project-ubin/ubin-quorum.git
+$ git clone https://github.com/pieterhartel/ubin-quorum.git
 ```
 
 3\.	Go into the newly created directory on each server.
