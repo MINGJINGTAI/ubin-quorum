@@ -18,7 +18,9 @@ module.exports = (done) => {
     paymentAgent = instance;
 
     console.log("Setting "+bankName+"'s stash balance to " + bal + "...");
-    return paymentAgent.pledge(bankName, bal, {privateFor: [consKey]});
+    //return paymentAgent.pledge(bankName, bal, {privateFor: [consKey]});
+    // Seb: fix for Error: Invalid number of arguments to Solidity function
+    return paymentAgent.pledge('R'+Date.now(), bankName, bal, {privateFor: [consKey]});
   }).then((result) => {
     console.log("\tmined!, block: "+result.receipt.blockNumber+", tx hash: "+result.tx);
     console.log("");
