@@ -152,9 +152,15 @@ quorum-genesis	QuorumNetworkManager
 setup         	
 ```
 
-Note that some binaries are installed in /usr/bin, e.g. geth, bootnode
+Note that some binaries are installed in /usr/bin, e.g. geth, bootnode. Your VM is a now a baseline Ubin Quorum machine. It is recommended to **backup your VM** as regular snapshots before each subsequent sections. 
 
 ## B. Configure Quorum nodes using Quorum Network Manager (QNM)
+
+### 1.	QNM 101
+If you have run quorum nodes manually before, managing genesis file, permissioned or static nodes file, default accounts, default balances, constellation nodes public/private keys etc. are borin tasks. The QNM is an utility for managing all these – distributing the configurations, starting and stoping quorum nodes etc.
+Read the background here: [`QuorumNetworkManager`](https://github.com/ConsenSys/QuorumNetworkManager).
+For a good overview, watch this [`video`]:(https://www.youtube.com/watch?v=YlANBFGy49Q)
+
 Preparation for setting up new Quorum Raft network:
 
 The VM setup for this document assumes VM nx01 is the Coordinator node and MAS Regulator node.
