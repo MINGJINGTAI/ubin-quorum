@@ -82,7 +82,7 @@ $ sudo apt-get install psmisc
 ```sh
 $ sudo apt-get install solc
 ```
-If encounter below ERROR
+If you encounter the ERROR below:
 ```sh
 E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)
 E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?
@@ -120,7 +120,7 @@ https://github.com/project-ubin/ubin-quorum-setup.git,
 ```sh
 $ git clone https://github.com/project-ubin/ubin-quorum-setup.git
 ```
-your directory structure should look like below
+your directory structure should look like this
 ```sh
 $ cd ~/ubin-quorum-setup
 $ ls
@@ -157,7 +157,7 @@ Note that some binaries are installed in /usr/bin, e.g. geth, bootnode. Your VM 
 ## B. Configure Quorum nodes using Quorum Network Manager (QNM)
 
 ### QNM 101
-If you have run quorum nodes manually before, managing genesis file, permissioned or static nodes file, default accounts, default balances, constellation nodes public/private keys etc. are borin tasks. The QNM is an utility for managing all these – distributing the configurations, starting and stoping quorum nodes etc.
+If you have run quorum nodes manually before, managing genesis file, permissioned or static nodes file, default accounts, default balances, constellation nodes public/private keys etc. are boring tasks. The QNM is a utility for managing all these – distributing the configurations, starting and stoping quorum nodes etc.
 Read the background here: [`QuorumNetworkManager`](https://github.com/ConsenSys/QuorumNetworkManager).
 For a good overview, watch this [`video`]:(https://www.youtube.com/watch?v=YlANBFGy49Q)
 
