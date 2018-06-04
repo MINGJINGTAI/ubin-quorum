@@ -20,14 +20,88 @@ Additional notes:
 
 2\.	Please include the two-digit numbers 01, 02 .. 14 in the name of the VMs and a static IP address has to be configured for all the VMs.
 
-3\. Node v8.x.x is installed for all the VMs
+3\. Update your machine:
+```sh
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt-get install openssh-server
+$ sudo service ssh restart
+```
 
-4\. Npm v5.x.x is installed for all the VMs
+4\. curl is installed for all the VMs
+```sh
+$ sudo apt-get install curl
+```
 
-5\. Java 8 installed in Central Bank VM
+5\. Node v8.x.x is installed for all the VMs
+```sh
+$ curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+$ sudo apt-get install -y nodejs
+```
 
-6\.	Confirm these ports are opened in the firewall rules
+6\. Npm v5.x.x is installed for all the VMs
+npm version 5 should already be installed by above step.
+```sh
+$ npm -v
+5.6.0
+```
 
+7\. Java 8 installed in Central Bank VM
+```sh
+$ sudo apt-get install software-properties-common python-software-properties
+```
+Add the PPA:
+```sh
+$ sudo add-apt-repository ppa:webupd8team/java
+```
+Run commands to update system package index and install Java installer script:
+```sh
+$ sudo apt update; sudo apt install oracle-java8-installer
+```
+Check the Java version after installing the package, run command:
+```sh
+$ javac -version
+javac 1.8.0_171
+$ java -version
+java version "1.8.0_171"
+Java(TM) SE Runtime Environment (build 1.8.0_171-b11)
+Java HotSpot(TM) 64-Bit Server VM (build 25.171-b11, mixed mode)
+```
+
+8\. GIT is installed.
+```sh
+$ sudo apt-get install git
+```
+
+9\. Killall is installed.
+```sh
+$ sudo apt-get install psmisc
+```
+
+10\. Solidity complier is installed.
+```sh
+$ sudo apt-get install solc
+```
+If encounter below ERROR
+```sh
+E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)
+E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?
+```
+
+Remove your /var/lib/dpkg/lock file and force package reconfiguration by:
+```sh
+$ sudo rm /var/lib/dpkg/lock
+$ sudo dpkg --configure -a
+```
+It should work after this.
+
+11\.	Screen is installed
+screen allows you to keep screen active while switching between your command line programs.
+```sh
+$ sudo apt-get install screen
+```
+
+12\.	Confirm these ports are opened in the firewall rules
 ```
 raft-http                           TCP 40000
 geth-communicationNode              TCP 50000
@@ -38,27 +112,29 @@ rpc                                 TCP 20010
 API                                 TCP 3000
 ```
 
-
-7\. SSH into the VM
+13\. SSH into the VM
 Tip: Merge your pub key into the ~/.ssh/authorized_keys for seamless login
 
-8\. Clone the installation setups/binaries from git repo 
-https://github.com/project-ubin/ubin-quorum-setup.git, your directory structure should look like below
-
+14\. Clone the installation setups/binaries from git repo 
+https://github.com/project-ubin/ubin-quorum-setup.git, 
+```sh
+$ git clone https://github.com/project-ubin/ubin-quorum-setup.git
+```
+your directory structure should look like below
 ```sh
 $ cd ~/ubin-quorum-setup
 $ ls
 binaries
 ```
 
-9\. End any running instances of Geth and constellation instances on all the VMs
+15\. End any running instances of Geth and constellation instances on all the VMs
 
 ```sh
 $ cd ~/ubin-quorum-setup/binaries/setup
 $ ./cleanup_process.sh
 ```
 
-10\. Install core prerequisites
+16\. Install core prerequisites
 
 ```sh
 $ cd ~/ubin-quorum-setup/binaries/setup
@@ -67,7 +143,7 @@ $ cd ~/ubin-quorum-setup/binaries/setup
 $ . ./setup_full.sh 
 ```
 
-11\. Confirm installation
+17\. Confirm installation
 
 ```sh
 $ ls ubin-quorum-setup/binaries
@@ -75,6 +151,8 @@ constellation	geth
 quorum-genesis	QuorumNetworkManager
 setup         	
 ```
+
+Note that some binaries are installed in /usr/bin, e.g. geth, bootnode
 
 ## B. Configure Quorum nodes using Quorum Network Manager (QNM)
 Preparation for setting up new Quorum Raft network:
