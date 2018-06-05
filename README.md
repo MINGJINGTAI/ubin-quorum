@@ -11,6 +11,7 @@ The Quorum smart contract code is written in Solidity and the API layer is writt
 Additional notes:
 * An external service (mock RTGS service) is to be deployed for Pledge and Redeem functions. It can be found in the [`ubin-ext-service`](https://github.com/project-ubin/ubin-ext-service)
 * A common UI can be found in the [`ubin-ui`](https://github.com/project-ubin/ubin-ui) repository. 
+* An ['addendum'](https://github.com/pieterhartel/ubin-quorum/blob/master/README_Addendum.docx) to this README is added to illustrate more depth in the deployment steps.
 
 # Quorum Network Setup
 
