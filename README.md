@@ -80,7 +80,12 @@ $ sudo apt-get install psmisc
 ```
 
 10\. Solidity complier is installed.
-```sh
+**TODO: solc may not exist as Ubunti package. It could well be installed when setting Quorum subsequently.
+Check these:
+https://packages.ubuntu.com/
+https://github.com/ethereum/homestead-guide/issues/204**
+
+```sh*
 $ sudo apt-get install solc
 ```
 If you encounter the ERROR below:
@@ -112,6 +117,8 @@ constellation-network               TCP 9000
 rpc                                 TCP 20010
 API                                 TCP 3000
 ```
+You can check out ['ufw'](https://wiki.ubuntu.com/UncomplicatedFirewall)
+
 
 13\. SSH into the VM
 Tip: Merge your pub key into the ~/.ssh/authorized_keys for seamless login
