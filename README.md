@@ -20,14 +20,88 @@ Additional notes:
 
 2\.	Please include the two-digit numbers 01, 02 .. 14 in the name of the VMs and a static IP address has to be configured for all the VMs.
 
-3\. Node v8.x.x is installed for all the VMs
+3\. Update your machine:
+```sh
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt-get install openssh-server
+$ sudo service ssh restart
+```
 
-4\. Npm v5.x.x is installed for all the VMs
+4\. curl is installed for all the VMs
+```sh
+$ sudo apt-get install curl
+```
 
-5\. Java 8 installed in Central Bank VM
+5\. Node v8.x.x is installed for all the VMs
+```sh
+$ curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+$ sudo apt-get install -y nodejs
+```
 
-6\.	Confirm these ports are opened in the firewall rules
+6\. Npm v5.x.x is installed for all the VMs
+npm version 5 should already be installed by above step.
+```sh
+$ npm -v
+5.6.0
+```
 
+7\. Java 8 installed in Central Bank VM
+```sh
+$ sudo apt-get install software-properties-common python-software-properties
+```
+Add the PPA:
+```sh
+$ sudo add-apt-repository ppa:webupd8team/java
+```
+Run commands to update system package index and install Java installer script:
+```sh
+$ sudo apt update; sudo apt install oracle-java8-installer
+```
+Check the Java version after installing the package, run command:
+```sh
+$ javac -version
+javac 1.8.0_171
+$ java -version
+java version "1.8.0_171"
+Java(TM) SE Runtime Environment (build 1.8.0_171-b11)
+Java HotSpot(TM) 64-Bit Server VM (build 25.171-b11, mixed mode)
+```
+
+8\. GIT is installed.
+```sh
+$ sudo apt-get install git
+```
+
+9\. Killall is installed.
+```sh
+$ sudo apt-get install psmisc
+```
+
+10\. Solidity complier is installed.
+```sh
+$ sudo apt-get install solc
+```
+If you encounter the ERROR below:
+```sh
+E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)
+E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?
+```
+
+Remove your /var/lib/dpkg/lock file and force package reconfiguration by:
+```sh
+$ sudo rm /var/lib/dpkg/lock
+$ sudo dpkg --configure -a
+```
+It should work after this.
+
+11\.	Screen is installed
+screen allows you to keep screen active while switching between your command line programs.
+```sh
+$ sudo apt-get install screen
+```
+
+12\.	Confirm these ports are opened in the firewall rules
 ```
 raft-http                           TCP 40000
 geth-communicationNode              TCP 50000
@@ -38,27 +112,29 @@ rpc                                 TCP 20010
 API                                 TCP 3000
 ```
 
-
-7\. SSH into the VM
+13\. SSH into the VM
 Tip: Merge your pub key into the ~/.ssh/authorized_keys for seamless login
 
-8\. Clone the installation setups/binaries from git repo 
-https://github.com/project-ubin/ubin-quorum-setup.git, your directory structure should look like below
-
+14\. Clone the installation setups/binaries from git repo 
+https://github.com/project-ubin/ubin-quorum-setup.git, 
+```sh
+$ git clone https://github.com/project-ubin/ubin-quorum-setup.git
+```
+your directory structure should look like this
 ```sh
 $ cd ~/ubin-quorum-setup
 $ ls
 binaries
 ```
 
-9\. End any running instances of Geth and constellation instances on all the VMs
+15\. End any running instances of Geth and constellation instances on all the VMs
 
 ```sh
 $ cd ~/ubin-quorum-setup/binaries/setup
 $ ./cleanup_process.sh
 ```
 
-10\. Install core prerequisites
+16\. Install core prerequisites
 
 ```sh
 $ cd ~/ubin-quorum-setup/binaries/setup
@@ -67,7 +143,7 @@ $ cd ~/ubin-quorum-setup/binaries/setup
 $ . ./setup_full.sh 
 ```
 
-11\. Confirm installation
+17\. Confirm installation
 
 ```sh
 $ ls ubin-quorum-setup/binaries
@@ -76,7 +152,15 @@ quorum-genesis	QuorumNetworkManager
 setup         	
 ```
 
+Note that some binaries are installed in /usr/bin, e.g. geth, bootnode. Your VM is a now a baseline Ubin Quorum machine. It is recommended to **backup your VM** as regular snapshots before each subsequent sections. 
+
 ## B. Configure Quorum nodes using Quorum Network Manager (QNM)
+
+### QNM 101
+If you have run quorum nodes manually before, managing genesis file, permissioned or static nodes file, default accounts, default balances, constellation nodes public/private keys etc. are boring tasks. The QNM is a utility for managing all these – distributing the configurations, starting and stoping quorum nodes etc.
+Read the background here: [`QuorumNetworkManager`](https://github.com/ConsenSys/QuorumNetworkManager).
+For a good overview, watch this [`video`]:(https://www.youtube.com/watch?v=YlANBFGy49Q)
+
 Preparation for setting up new Quorum Raft network:
 
 The VM setup for this document assumes VM nx01 is the Coordinator node and MAS Regulator node.
@@ -96,10 +180,12 @@ $ screen -r
 $ screen node index.js
 
 ```
+Do note that usage of "screen" is not mandatory. The alternative is to open more ssh sessions.
 
 ### 2.	Configure coordinating node
 1\. Identify the coordinator node, this is the node that all the participating nodes will join. This is the MAS Regulator node for Project Ubin - in this guide it will be named " nx01".
 
+Example 1:
 ```sh
 # Quorum Network Manager open, proceed only if ip address available.
 # Type in the server name for the nodeName in the four character, this is only used for reference
@@ -107,6 +193,14 @@ $ screen node index.js
 prompt: localIpAddress: (1.2.3.4)
 prompt: nodeName: nx01
 ```
+Example 2:
+```sh
+# change the IP to the static IP that other nodes can communicate
+# e.g  from 115.66.31.158 to 192.168.9.136
+prompt: localIpAddress: (115.66.31.158) 192.168.9.136
+prompt: nodeName: nx01
+```
+
 
 2\. Close any running instances of geth and constellation by selecting option 5.
 
@@ -131,7 +225,7 @@ Please select an option:
 prompt: option: 1
 ```
 
-4\. Copy the IP address (this will be used when we configure the non-coordinating node)
+4\. Copy the IP address (this will be used when we configure the other non-coordinating nodes)
 Select 1, "Start a node as the setup coordinator"
 
 ```sh
@@ -157,8 +251,11 @@ Please select an option below:
 prompt: option: 1
 ```
 
-6\. Select 1, "Clear all files..."
- 
+6\. Select 1, "Clear all files..." or "Keep old files..."
+
+Please note that if this is the first time you are setting up, or if you want to erase previous and re-do the setup, you should select "Clear all files".
+If you are re-running from previous setup, you MUST select **"Keep old files"**. Failing this will result in all your nodes configuration information being erased!
+
 ```sh
 Please select an option below:
 1) Clear all files/configuration and start from scratch[WARNING: this clears everything]
@@ -176,19 +273,45 @@ prompt: done:
 
 7\. A message will appear that it is waiting for new nodes to join; at this point, participating nodes can join in. Go to Section 3 (Steps for Participating nodes (non-coordinator)) and execute the steps for each node you want to add. Return to this section and continue with the next step once you have finished adding all the new nodes.
 
-*** Only do the next step once all the nodes have joined in ***
+***Only do the next step once all the nodes have joined in***
 
-8\. Once all nodes have joined, press Enter to create the network config files.
+8\. Once all nodes have joined, press any key (e.g. "p") and then Enter to create the network config files.
 Wait until all nodes have responded then press Ctrl+A+D to detach from the screen.
-
+This example only shows a network with only 3 nodes joining (including coordinating node):
+```sh
+prompt: done:  nx02 has joined the network
+nx03 has joined the network
+p and <enter>
+Adding the following addresses to the genesis block: [ '0x6398dd29d801211d2492e9b6062c33b8aac74599',
+  '0x000000000000000000000000000000005a534c01',
+  '0x000000000000000000000000000000005a534c02',
+  '0x000000000000000000000000000000005a534c03',
+  '0x000000000000000000000000000000005a534c04',
+  '0x000000000000000000000000000000005a534c05',
+  '0x4a96d31bfe8d4e797ba60cb9994fb18220354263',
+  '0x49c40d934caf14114210161ab4bd6d59d12b53e3' ]
+[*] Creating genesis config...
+[*] Starting raft node...
+[*] RPC connection established, Node started
+[*] Done
+```
 
 ### 3. Steps for Participating nodes (non-coordinator)
 Ensure Section 1: Pre-requisites are executed
+For each participating (non-coordinator) node, perform below steps:
 
 1\.	Give the node a name (e.g. "nx02"), this name has to be unique.
 
+Example 1:
 ```sh
 prompt: localIpAddress: (1.2.3.5)
+prompt: nodeName: nx02
+```
+Example 2:
+```sh
+# change the IP to the static IP that other nodes can communicate
+# e.g  from 115.66.31.158 to 192.168.9.137
+prompt: localIpAddress: (115.66.31.158) 192.168.9.137
 prompt: nodeName: nx02
 ```
 
@@ -219,7 +342,10 @@ Please select an option below:
 prompt: option: 2
 ```
 
-4\.	Select 1, "Clear all files..."
+4\.	Select 1, "Clear all files..." or "Keep old files..."
+
+Again, please note that if this is the first time you are setting up, or if you want to erase previous and re-do the setup, you should select "Clear all files".
+If you are re-running from previous setup, you MUST select **"Keep old files"**. Failing this will result in all your nodes configuration information being erased!
 
 ```sh
 Please select an option below:
@@ -230,9 +356,15 @@ prompt: option: 1
 
 5\.	Enter the IP address of the coordinating node.
 
+Example 1:
 ```sh
 In order to join the network, please enter the ip address of the coordinating node
 prompt: ipAddress: 1.2.3.4
+```
+Example 2:
+```sh
+# example of an actual coordinating node
+prompt: ipAddress: 192.168.9.136
 ```
 
 6\.	After a short moment, a message should appear that the node has joined.
@@ -281,8 +413,7 @@ at block: 3656 (Fri, 11 Feb 47846936856 07:04:31 UTC)
 
 9\. When all nodes have been added, return to Section 2, Step 8 to complete the network setup from the coordinator VM.
 
-
-Once the coordinator steps have been completed and you have detacted from screen (Ctrl+A+D) in each of the VMs, the Raft Quorum network setup is complete.
+If you are using "screen" - Once the coordinator steps have been completed and you have detacted from screen (Ctrl+A+D) in each of the VMs, the Raft Quorum network setup is complete.
 
 
 # C. Contract Deployment
@@ -290,9 +421,26 @@ The VM setup for this document assumes the following:
 VM nx01 – Coordinator node and MAS Regulator node
 VM nx11 – Deployment node where smart contracts will be deployed from
 
-If a new Quorum network has been setup by executing the steps from section B, make sure to run through steps 1 & 2, otherwise skip to step 3.
+## Pre-requisites for Deployment node
+SSH to Deployment node to do git clone:
+```sh
+$ git clone https://github.com/project-ubin/ubin-quorum.git
+```
 
-1\. Copy the network configuration (`networkNodeInfo.js`) from the coordinator node’s QuorumNetworkManager directory to the deployment node’s `ubin-quorum` directory.
+Install truffle
+```sh
+$ sudo npm install -g truffle
+```
+
+From ubin-quorum directory where package.json is found, run “npm install” so that required js modules can be resolved when deploy.sh executes js programs later.
+```sh
+$ cd ~/ubin-quorum/
+$ npm install
+```
+
+If a new Quorum network has been setup by executing the steps from section B, make sure to run through steps 1 & 2 below, otherwise skip to step 3.
+
+1\. Copy the network configuration (`networkNodeInfo.json`) from the coordinator node’s QuorumNetworkManager directory to the deployment node’s `ubin-quorum` directory.
 
 2\.	Generate the Quorum configuration (from deployment node)
 
