@@ -3,19 +3,27 @@ pragma solidity ^0.4.11;
 contract Owned{
   address owner;
 
-  function Owned() {
+  constructor() public {
     owner = msg.sender;
   }
 
-  modifier onlyOwner() {
-    if(msg.sender!=owner) throw; _;
+  // throw is deprecated, see https://solidity.readthedocs.io/en/develop/control-structures.html#error-handling-assert-require-revert-and-exceptions
+  //modifier onlyOwner() {
+  //  if(msg.sender!=owner) throw; _;
+  //}
+
+  modifier onlyOwner{
+    if (msg.sender != owner){
+        revert();
+    }
+    _;
   }
 
-  function getOwner() constant returns (address) {
+  function getOwner() public constant returns (address) {
     return owner;
   }
 
-  function changeOwner(address _newOwner) onlyOwner {
+  function changeOwner(address _newOwner) public onlyOwner {
     owner = _newOwner;
   }
 }
