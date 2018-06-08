@@ -1,4 +1,5 @@
 /* pragma solidity ^0.4.11; */
+pragma solidity ^0.4.11; // Seb added, but Looks like this contract externs to a library of an older Solidity contract
 
 // Copyright 2017 Zerocoin Electric Coin Company LLC
 //
@@ -18,28 +19,28 @@
  @title Abstract contract for built-in function
  */
 contract ZSLPrecompileSHA256Compress {
-    function run(bytes) constant returns (bytes32);
+    function run(bytes) public constant returns (bytes32);
 }
 
 /**
  @title Abstract contract for built-in function
  */
 contract ZSLPrecompileVerify {
-    function run(bytes, bytes32, bytes32, uint64) constant returns (bytes32);
+    function run(bytes, bytes32, bytes32, uint64) public constant returns (bytes32);
 }
 
 /**
  @title Abstract contract for built-in function
  */
 contract ZSLPrecompileVerifyTransfer {
-    function run(bytes, bytes32, bytes32, bytes32, bytes32, bytes32, bytes32, bytes32) constant returns (bytes32);
+    function run(bytes, bytes32, bytes32, bytes32, bytes32, bytes32, bytes32, bytes32) public constant returns (bytes32);
 }
 
 /**
  @title Abstract contract for built-in function
  */
 contract ZSLPrecompileVerifyABC {
-    function run(bytes, bytes32, bytes32, bytes32) constant returns (bytes32);
+    function run(bytes, bytes32, bytes32, bytes32) public constant returns (bytes32);
 }
 
 /**
@@ -54,12 +55,24 @@ contract ZSLPrecompile {
     ZSLPrecompileVerifyABC private verifyABCContract;
 
     // @dev Address of precompiles must match those in the Geth/Quorum client
-    function ZSLPrecompile() {
-        compressContract = ZSLPrecompileSHA256Compress(0x000000000000000000000000000000005a534c01);
-        verifyShieldedTransferContract = ZSLPrecompileVerifyTransfer(0x000000000000000000000000000000005a534c02);
-        verifyShieldingContract = ZSLPrecompileVerify(0x000000000000000000000000000000005a534c03);
+    constructor() public {
+        // Fix the warning: This looks like an address but has an invalid checksum. If this is not used as an address, please prepend '00'.
+        // Just append the 0xaddress to web browser url https://etherscan.io/address/ to get the correct checksum address with upper-lower cases
+        // Example:
+        // https://etherscan.io/address/0x000000000000000000000000000000005a534c01
+	// Address  0x000000000000000000000000000000005A534c01
+        //
+        //compressContract = ZSLPrecompileSHA256Compress(0x000000000000000000000000000000005a534c01);
+        //verifyShieldedTransferContract = ZSLPrecompileVerifyTransfer(0x000000000000000000000000000000005a534c02);
+        //verifyShieldingContract = ZSLPrecompileVerify(0x000000000000000000000000000000005a534c03);
+        //verifyUnshieldingContract = ZSLPrecompileVerify(0x000000000000000000000000000000005a534c04);
+        //verifyABCContract = ZSLPrecompileVerifyABC(0x000000000000000000000000000000005a534c05);
+
+        compressContract = ZSLPrecompileSHA256Compress(0x000000000000000000000000000000005A534c01);
+        verifyShieldedTransferContract = ZSLPrecompileVerifyTransfer(0x000000000000000000000000000000005A534c02);
+        verifyShieldingContract = ZSLPrecompileVerify(0x000000000000000000000000000000005a534C03);
         verifyUnshieldingContract = ZSLPrecompileVerify(0x000000000000000000000000000000005a534c04);
-        verifyABCContract = ZSLPrecompileVerifyABC(0x000000000000000000000000000000005a534c05);
+        verifyABCContract = ZSLPrecompileVerifyABC(0x000000000000000000000000000000005A534C05);
     }
 
     // @param input Input data block must be 64 bytes (512 bits) in length
@@ -132,13 +145,14 @@ contract ZSLPrecompile {
     }
 
     // Fallback function for unknown function signature to prevent accidental sending of ether
-    function () {
+    function () public {
         revert();
     }
 
     /*
       Utility functions when compiling with solidity 0.3.6
     */
+/* Seb commented out. Using 0.4.11 and later
     function assert(bool assertion) internal {
       if (!assertion) {
         throw;
@@ -154,5 +168,5 @@ contract ZSLPrecompile {
     function revert() internal {
       throw;
     }
-
+*/
 }

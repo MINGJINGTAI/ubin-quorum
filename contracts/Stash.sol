@@ -12,48 +12,52 @@ contract Stash is Owned {
   int position; 	/* position = inflows + balance - outflows */
   bool controlled;	/* @private */
 
-  function Stash(bytes32 _bankName) {
+  constructor(bytes32 _bankName) public {
     bankName = _bankName;
   }
 
-  function credit(int _crAmt) onlyOwner {
+  function credit(int _crAmt) public onlyOwner {
     balance += _crAmt;
   }
 
-  function debit(int _dAmt) onlyOwner {
+  function debit(int _dAmt) public onlyOwner {
     balance -= _dAmt;
   }
 
-  function safe_debit(int _dAmt) onlyOwner {
-    if (_dAmt > balance) throw;
+  function safe_debit(int _dAmt) public onlyOwner {
+    // throw is deprecated, see https://solidity.readthedocs.io/en/develop/control-structures.html#error-handling-assert-require-revert-and-exceptions
+    //if (_dAmt > balance) throw;
+    if (_dAmt > balance) {
+      revert("Debit amount is more than balance."); // Seb: I do not see Solidity has localization of strings
+    }
     balance -= _dAmt;
   }
 
-  function inc_position(int amt) onlyOwner {
+  function inc_position(int amt) public onlyOwner {
     position += amt;
   }
 
-  function dec_position(int amt) onlyOwner {
+  function dec_position(int amt) public onlyOwner {
     position -= amt;
   }
 
-  function getBalance() constant returns (int) {
+  function getBalance() public constant returns (int) {
     return balance;
   }
 
-  function getPosition() constant returns (int) {
+  function getPosition() public constant returns (int) {
     return position;
   }
 
-  function isSolvent() constant returns (bool) {
+  function isSolvent() public constant returns (bool) {
     return position >= 0;
   }
 
-  function mark() onlyOwner {
+  function mark() public onlyOwner {
     controlled = true;
   }
 
-  function isControlled() constant returns (bool) {
+  function isControlled() public constant returns (bool) {
     return controlled;
   }
 }
