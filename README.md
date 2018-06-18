@@ -19,6 +19,16 @@ Additional notes:
 
 1\.	Provision 14 Ubuntu (Xenial - LTS 16.04) VMs (11 banks, 1 MAS central bank, 1 MAS Regulatory Node, 1 deployment, 16GB, 2 cores)
 
+**You must ensure the OS version is Ubuntu 16.04 LTS**
+```sh
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 16.04.3 LTS
+Release:        16.04
+Codename:       xenial
+```
+
 2\.	Please include the two-digit numbers 01, 02 .. 14 in the name of the VMs and a static IP address has to be configured for all the VMs.
 
 3\. Update your machine:
@@ -80,10 +90,13 @@ $ sudo apt-get install psmisc
 ```
 
 10\. Solidity complier is installed.
-**TODO: solc may not exist as Ubunti package. It could well be installed when setting Quorum subsequently.
-Check these:
-https://packages.ubuntu.com/
-https://github.com/ethereum/homestead-guide/issues/204**
+
+**solc may not be found as update of Ubuntu package at this point. It could be installed after install Ubin at step 16.
+Check these:**
+
+**https://packages.ubuntu.com/**
+
+**https://github.com/ethereum/homestead-guide/issues/204**
 
 ```sh*
 $ sudo apt-get install solc
@@ -149,6 +162,12 @@ $ cd ~/ubin-quorum-setup/binaries/setup
 # Important! there is a space between the two periods
 
 $ . ./setup_full.sh 
+```
+
+Install solc if it not already installed.
+
+```sh*
+$ sudo apt-get install solc
 ```
 
 17\. Confirm installation
