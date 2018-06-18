@@ -445,13 +445,15 @@ If you are using "screen" - Once the coordinator steps have been completed and y
 
 # C. Contract Deployment
 The VM setup for this document assumes the following:
+
 VM nx01 – Coordinator node and MAS Regulator node
+
 VM nx11 – Deployment node where smart contracts will be deployed from
 
 ## Pre-requisites for Deployment node
 SSH to Deployment node to do git clone:
 ```sh
-$ git clone https://github.com/project-ubin/ubin-quorum.git
+$ git clone https://github.com/pieterhartel/ubin-quorum.git
 ```
 
 Install truffle
