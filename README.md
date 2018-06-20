@@ -323,6 +323,8 @@ Adding the following addresses to the genesis block: [ '0x6398dd29d801211d2492e9
 [*] Done
 ```
 
+9.\ Save a copy of network configuration file (`networkNodeInfo.json`) immediately after the above step 8. This file is updated by step 8 and is found in QuorumNetworkManager directory. It will be used for the Deployment section later.
+
 ### 3. Steps for Participating nodes (non-coordinator)
 Ensure Section 1: Pre-requisites are executed
 For each participating (non-coordinator) node, perform below steps:
