@@ -475,9 +475,24 @@ If a new Quorum network has been setup by executing the steps from section B, ma
 
 2\.	Generate the Quorum configuration (from deployment node)
 
+convertConfig.js generates various config files, including truffle.js used by truffle.
+
 ```sh
 $ cd ~/ubin-quorum/
 $ node convertConfig.js
+```
+
+After executing above, update the "mas:" settings in truffle.js file with the "from:" account address. This address should be the coinbase address from node 1 (nx01).
+
+```sh
+    mas: {
+      nodeId: 1,
+      host: "quorumnx01.southeastasia.cloudapp.azure.com",
+      port: 20010,
+      network_id: "*",
+      from: "0x7ce0c1d9ad848a781af2ed613b2d8db6c9178673", // nx01's coinbase
+      gas: 200000000
+    },
 ```
 
 3\.	Deploy contracts to the network.
