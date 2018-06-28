@@ -60,8 +60,8 @@ var stashNames = {
   "9" : "MTBCSGSG",
   "10" : "OCBCSGSG",
   "12" : "SCBLSGSG",
-  "14" : "UOBVSGSG",
-  "15" : "XSIMSGSG"
+  "13" : "UOBVSGSG",
+  "14" : "XSIMSGSG"
 };
 // Seb modified
 var truffleNames = { 
@@ -76,15 +76,23 @@ var truffleNames = {
   "9" : "g", 
   "10" : "h", 	
   "12" : "i", 	
-  "14" : "j", 
-  "15" : "k" 	
+  "13" : "j", 
+  "14" : "k" 	
 }; 			
 
 var counter = 0;
 
 Object.keys(config).forEach( enode => {
+  if (config[enode].nodeName === "nx14") { // Seb: NCL nodes are continuous
+    config[enode].nodeName = "nx13";
+    console.log("NCL nodeName nx14 changed to nx13");
+  }
+  if (config[enode].nodeName === "nx15") { // Seb: NCL nodes are continuous
+    config[enode].nodeName = "nx14";
+    console.log("NCL nodeName nx15 changed to nx14");
+  }
   let nodeId = config[enode].nodeName.slice(2,4);
-  let nodeNr = parseInt(nodeId); // Seb for NCL
+  let nodeNr = parseInt(nodeId); // Seb: NCL nodes, no padding required
   if (nodeNr < 10 ) {
     nodeId = nodeNr;
   }
@@ -96,7 +104,7 @@ Object.keys(config).forEach( enode => {
   let nodeConfig = {
     "nodeId" : parseInt(nodeId),
     /*"host" : "quorumnx"+nodeId+".southeastasia.cloudapp.azure.com",*/
-    "host" : "n"+nodeId, // Seb for NCL
+    "host" : "n"+nodeId, // Seb: NCL nodes does not need FQDN, just hostname is preferred
     "port": "20010",
     "accountNumber" : 0,
     "ethKey" : config[enode].address,
