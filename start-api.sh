@@ -12,8 +12,8 @@ NETWORK_CONFIG_PATH='/server/config/network.json'
 
 # Seb:
 # modified for own ubin home and user
-API_PATH='/tmp/ubin-quorum'
-HOME_DIR='/tmp/ubin-quorum'
+API_PATH='/mnt/ubin/ubin-quorum'
+HOME_DIR='/mnt/ubin/ubin-quorum'
 USER='sma05054'
 
 if hash jq 2>/dev/null; then
