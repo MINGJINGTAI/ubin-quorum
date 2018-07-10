@@ -83,14 +83,17 @@ var truffleNames = {
 var counter = 0;
 
 Object.keys(config).forEach( enode => {
-  if (config[enode].nodeName === "nx14") { // Seb: NCL nodes are continuous
+  /* Seb: We do not need this as long as networkNodesInfo.json contains
+          nx01, nx02, nx03,......nx10, nx12, nx13, nx14
+  if (config[enode].nodeName === "nx14") {
     config[enode].nodeName = "nx13";
     console.log("NCL nodeName nx14 changed to nx13");
   }
-  if (config[enode].nodeName === "nx15") { // Seb: NCL nodes are continuous
+  if (config[enode].nodeName === "nx15") {
     config[enode].nodeName = "nx14";
     console.log("NCL nodeName nx15 changed to nx14");
   }
+  */
   let nodeId = config[enode].nodeName.slice(2,4);
   let nodeNr = parseInt(nodeId); // Seb: NCL nodes, no padding required
   if (nodeNr < 10 ) {
