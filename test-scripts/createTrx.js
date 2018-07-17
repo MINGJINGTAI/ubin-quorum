@@ -1,4 +1,6 @@
 const fs = require('fs');
+const truffleAssert = require('truffle-assertions'); // Seb added, do from ubin-quorum/
+                                                     // npm install truffle-assertions
 var nodes = JSON.parse(fs.readFileSync('config/config.json', 'utf8'));
 
 var PaymentAgent = artifacts.require("./PaymentAgent.sol");
@@ -18,6 +20,9 @@ if (receiver.length === 1){
   receiver_acc = nodes[receiver].ethKey;
   receiver = nodes[receiver].stashName;
 }
+console.log('receiver_acc: '+receiver_acc);
+console.log('receiver: '+receiver);
+
 var amount  = process.argv[7];
 var express = process.argv[8];
 var directQueue = process.argv[9] === 1? true : false;
@@ -31,6 +36,7 @@ console.log('nodesPrivateFor: '+nodesPrivateFor);
 
 keysPseudoPub = u.getValueFromAllNodes(nodesPseudoPub, 'constKey');
 keysPrivateFor = u.getValueFromAllNodes(nodesPrivateFor, 'constKey');
+console.log('keysPrivateFor: '+keysPrivateFor); // Seb added
 
 module.exports = (done) => {
   let paymentAgent = null;
@@ -67,14 +73,26 @@ module.exports = (done) => {
                                   {gas: 1000000,
                                    privateFor: keysPrivateFor});
   }).then((result) => {
-    gridlocked = result.logs[0].args.gridlocked;
-
+    // Seb: bug - logs[] is empty
+    // https://github.com/jpmorganchase/quorum/issues/400
+    //gridlocked = result.logs[0].args.gridlocked;
+    gridlocked = false; // Seb added
+    console.log("result: "+JSON.stringify(result)); // Seb added
+    
     util.colorLog("\tmined!, block: "+result.receipt.blockNumber+", tx hash: "+result.tx, currentNetwork);
     util.colorLog(JSON.stringify(result.logs), currentNetwork);
     util.colorLog("");
-    util.colorLog('[Payment event] txRef: '+util.hex2a(result.logs[0].args.txRef), currentNetwork);
+    // Seb: bug - logs[] is empty
+    //util.colorLog('[Payment event] txRef: '+util.hex2a(result.logs[0].args.txRef), currentNetwork);
     util.colorLog('[Payment event] gridlocked: '+gridlocked, currentNetwork);
     util.colorLog("", currentNetwork);
+
+    // Seb added
+    // https://blog.kalis.me/check-events-solidity-smart-contract-test-truffle/
+    truffleAssert.eventEmitted(result.receipt, 'Payment', (ev) => {
+        //return ev.player === bettingAccount && !ev.betNumber.eq(ev.winningNumber);
+        console.log("event: "+JSON.stringify(ev));
+    });
 
     return sgdz.submitShieldedPayment(txRef, receiver_acc, amountHash, true);
   }).then((result) => {
