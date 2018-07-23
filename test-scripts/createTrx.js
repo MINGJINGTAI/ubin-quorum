@@ -73,11 +73,10 @@ module.exports = (done) => {
                                   {gas: 1000000,
                                    privateFor: keysPrivateFor});
   }).then((result) => {
-    // Seb: bug - logs[] is empty
-    // https://github.com/jpmorganchase/quorum/issues/400
-    //gridlocked = result.logs[0].args.gridlocked;
-    gridlocked = false; // Seb added
+    // Seb: bug - logs[] is empty, PaymentAgent.sol calling Stash.sol results in this error
+    // see also https://github.com/jpmorganchase/quorum/issues/400
     console.log("result: "+JSON.stringify(result)); // Seb added
+    gridlocked = result.logs[0].args.gridlocked;
     
     util.colorLog("\tmined!, block: "+result.receipt.blockNumber+", tx hash: "+result.tx, currentNetwork);
     util.colorLog(JSON.stringify(result.logs), currentNetwork);
